@@ -1,0 +1,49 @@
+{% extends "form/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <nav class="headerHome"></nav>
+        <div class>
+            <ul class="headerul">
+                <li>        
+                    <button class = "otherButton"><a class = "othera headera" href="{% url 'task_list' %}">  Home </a> </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+<div class="profileCenter">
+        <div class="profileView">
+            <div> 
+                <img class="profilePic" src="{{ user.profile.image.url }}"> 
+            </div>
+            <div class="profileUser">  {{ user.username }} </div>
+            <div class="profileEmail">  {{user.email}}  </div>
+            <div>  {{user.phone_number}}  </div> 
+        </div>
+</div>
+<div class="mflex"> 
+    <div id="modal"> 
+        <div id = "modalTop" class = "modalTop"> 
+            <div class="modalHeader"> Please Fill In The Form With Required Information
+            </div>   
+        </div>
+        <div id="modalContent">    
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <fieldset>
+                    {{ u_form|crispy }}
+                    {{ p_form|crispy }}
+                </fieldset>
+                <div class="loginFlex">   
+                    <div> 
+                        <button class="updateButton" type="submit"> Update Profile </button>
+                    </div>
+                </div>
+            </form>
+                
+
+        </div>        
+    </div>
+</div>
+
+{% endblock content%}

@@ -1,0 +1,139 @@
+{% extends "form/base.html" %}
+{% block content %}
+{% load static %}
+
+    <nav class>
+        <ul class="detailHeader">
+            <li>
+                <button class = "otherButton"><a class = "othera headera" href="{% url 'task_list' %}"> Home </button>
+            </li>
+            <li>
+                <a href="{% url 'update_issue' object.task_id %}"> <img class="icon" src="{% static 'form/images/edit.png' %}" /> </a>
+            </li>
+        </ul>
+    </nav>
+    <div class="grid-detail detail1"> 
+        <div class ="grid-header"> Task ID </div>
+        <div class ="grid-header"> Subject </div>
+        <div class ="grid-header"> Content </div>
+        <div class ="grid-header"> Status </div>
+        <div class ="grid-item"> {{ object.task_id }} </div>
+        <div class ="grid-item"> {{ object.subject }} </div>
+        <div class ="grid-item"> {{ object.content }} </div>
+        <div class ="grid-item"> <p class="status"> {{ object.status }} </p> </div>
+    </div>
+
+
+    <div class="grid-detail detail1">
+        <div class ="grid-header"> Add Date Time </div>
+        <div class ="grid-header"> Start Date </div>
+        <div class ="grid-header"> End Date </div>
+        <div class ="grid-header"> Due Date </div>
+        <div class ="grid-item"> {{ object.add_date_time }} </div>
+        <div class ="grid-item"> {{ object.start_date }} </div>
+        <div class ="grid-item"> {{ object.end_date }} </div>
+        <div class ="grid-item"> {{ object.due_date }} </div>
+    </div>
+
+    <div class="grid-detail detail2"> 
+        <div class ="grid-header"> Issue ID</div>
+        <div class ="grid-header"> Issue Type</div>
+        <div class ="grid-item"> {{ object.issue_type.issue_type_no }} </div>
+        <div class ="grid-item"> {{ object.issue_type.issue_type }} </div>
+    </div>
+    <div class="grid-detail detail1"> 
+        <div class ="grid-header"> Frequency ID </div>
+        <div class ="grid-header"> Frequency </div>
+        <div class ="grid-header"> Extended Frequency Yes/No </div>
+        <div class ="grid-header"> Extended Frequency Value </div>
+        <div class ="grid-item"> {{ object.frequency.frequency_no }} </div>
+        <div class ="grid-item"> {{ object.frequency.description }} </div>
+        <div class ="grid-item"> {{ object.frequency.extended_frequency_boolean }} </div>
+        <div class ="grid-item"> {{ object.frequency.extended_frequency_value }} </div>
+    </div>
+    <div class="grid-detail detail2"> 
+        <div class ="grid-header"> Delivery Method ID </div>
+        <div class ="grid-header"> Delivery Method </div>
+        <div class ="grid-item"> {{ object.delivery_method.delivery_method_no }} </div>
+        <div class ="grid-item"> {{ object.delivery_method.method_name }} </div>
+    </div>
+    <div class="grid-detail detail2"> 
+        <div class ="grid-header"> Recipient ID </div> 
+        <div class ="grid-header"> Recipient </div> 
+        <div class ="grid-item"> {{ object.recipient.id }} </div>
+        <div class ="grid-item"> {{ object.recipient.username}} </div>
+    </div>
+        
+    <!--  Displaying Comment  -->
+        
+    <div class="pageEnding">
+        
+        <div class="cmtNav">
+                <div class ="cmtBoxHeader yellow"> 
+                    <div> Comments Regarding This Task: </div>
+                    <div> <button class="yellow" id="cmtButton"> <img class="icon" src="{% static 'form/images/add.png' %}"/> </button>  </div>          
+                </div>
+                <div class="cmtDetails"> 
+                {% if cmts %}
+                    {% for cmt in cmts %} 
+        <!--          <div> Task ID: {{ cmt.task_id_id }} </div> -->
+                    <div class="commentContainer"> 
+                        <div class="cmtHeader">                     
+                            <div class="cmtIcon"> <img class="iconComment" src="{{ cmt.user.profile.image.url }}">  </div>
+                            <div> {{ cmt.user.username }} </div> 
+                            <div class="cmtDate"> {{ cmt.comment_date|date:"l, F d - Y" }} at {{ cmt.comment_date|date:"H:i a" }} </div>
+                        </div>
+                        <div class="cmt"> {{ cmt.comments }} </div>
+                        <div class="cmtStatusContainer">
+                            <div class="cmtStatus"> <p class="status"> {{ cmt.status }} </p> </div>
+                        </div>
+                    </div>
+                        
+                    {% endfor %}
+                {% else %}
+                    <div class="cmtNull">No Comments Available.</div>
+                {% endif %}
+                </div>
+        </div>
+
+        <!--  Create Comment  -->
+
+        <div class="createComment" id="createComment">
+            <div class="mflexComment"> 
+                <div id="modalComment"> 
+                    <div id = "modalTop" class = "modalTop"> 
+                        <div> <button id="closeButton"> &times; </button> </div>
+                        <div class="modalHeader"> Please Fill In The Form With Required Information </div>   
+                    </div>
+                    <div id="modalContent">    
+                        <form method="POST" action="{% url 'task_detail' task.pk %}">        
+                            
+                            
+    
+                            <div class="modalItemsComment">
+                                <label class="mlComment" for="commentContent"> Content:</label>
+                                <textarea id="commentContent" name="commentContent" rows="3" required> </textarea>  
+                            </div>
+
+                            <div class="modalItemsComment"> 
+                                <label class="mlComment" for="commentStatus">Status:</label>
+                                <select class="create" name="commentStatus" id="commentStatus" required>
+                                    <option value="" disabled> Select Status </option>
+                                    <option value="active" {% if task.status == 'active' %}selected{% endif %}>Active</option>
+                                    <option value="pending" {% if task.status == 'pending' %}selected{% endif %}> Pending </option>
+                                    <option value="inactive" {% if task.status == 'inactive' %}selected{% endif %}>Inactive</option>
+                                </select>  
+                            </div>
+                            <div class="buttonComment"> 
+                                <button type="submit" class="modalButtonComment">Create Comment</button> 
+                            </div>
+                            {% csrf_token %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+{% endblock content %}

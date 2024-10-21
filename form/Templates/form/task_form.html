@@ -1,0 +1,149 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        <link rel="stylesheet" type="text/css" href="{% static 'form/main.css' %}">
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+    </head>
+    <body>
+        <div class ="bar">
+            <div> Create </div> 
+            <div class="barLink">
+                {% if user.is_authenticated %}
+                    <div> <a href="{% url 'profile' %}" class="issuea"> Profile </a> </div>
+                    <div> 
+                        <form method="POST" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="logoutButton">Logout</button>
+                        </form> 
+                    </div>                
+                {% else %}
+                    <div> <a href="{% url 'register' %}" class="issuea"> Register </a> </div>
+                    <div> <a href="{% url 'login' %}" class="issuea"> Login </a> </div>
+                {% endif %}
+            </div>
+        </div>
+        <nav class="headerHome">
+            <div class>
+                <ul class="headerul">
+                    <li>
+                        <button class = "otherButton"><a class = "othera headera" href="{% url 'task_list' %}">  Home </a> </button>
+                    </li>
+                </ul>    
+        </nav>
+        <div class="mflex"> 
+            <div id="modal"> 
+                <div id = "modalTop" class = "modalTop"> 
+                    <div class="modalHeader"> Please Fill In The Form With Required Information
+                    </div>   
+                </div>
+                <div id="modalContent">    
+
+                    <form method="POST" action="{% url 'create_issue' %}">
+                        
+                        
+                        <div class="modalItems">
+                            <label class="ml" for="subject">Subject:</label>
+                            <input type="text" id="subject" class="subj" name="subject" required>
+                        </div>
+
+                        <div class="modalItems">
+                            <label class="ml" for="content">Content:</label>
+                            <textarea id="content" name="content" rows="3" required> </textarea>  
+                        </div>
+
+                        <div class="modalItems">
+                            <label class="ml" for="issue_type">Issue Type:</label>
+                            <select class="create" name="issue_type" id="issue_type" required>
+                                <option value="" disabled selected>Issue Types</option>
+                                <option value="Top Urgent"> Top Urgent</option>
+                                <option value="Urgent">Urgent</option>
+                                <option value="High">High</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Low">Low</option>
+                            </select>  
+                        </div>
+
+                        <!-- Date Entries -->
+
+                        <div class="modalItems">
+                            <label class="ml" for="start_date">Start Date:</label>
+                            <input type="datetime-local" id="start_date" name="start_date" required>
+                        </div>
+
+                        <div class="modalItems">
+                            <label class="ml" for="end_date">End Date:</label>
+                            <input type="datetime-local" id="end_date" name="end_date">
+                        </div>
+
+                        <div class="modalItems">
+                            <label class="ml" for="due_date">Due Date:</label>
+                            <input type="datetime-local" id="due_date" name="due_date">
+                        </div>
+
+                        <div class="modalItems">
+                            <label class="ml" for="interval_type"> Frequency </label>
+                            <select class="create" name="interval_type" id="interval_type" required>
+                                <option value="" disabled selected>Frequency Type</option>
+                                <option value="Hourly"> Hourly</option>
+                                <option value="Daily">Daily</option>
+                                <option value="Weekly">Weekly</option>
+                                <option value="Monthly">Monthly</option>
+                                <option value="Yearly">Yearly</option>
+                            </select> 
+                            <input type="text" id="interval_value" name="interval_value" placeholder="e.g. 3" required>
+                        </div>
+                        <div class="modalItems">            
+                            <label class="ml" for="addFreq" id="addFreqLabel"> Extended-Frequency </label>
+                            <input type="checkbox" id="addFreq" name="addFreq">
+                                <div id="changeContainer"> 
+                                    <label class="ml" for="changeOnce" id="changeAfter" class="changeAfter"> Change Frequency:  </label>
+                                    <input type="text" class="changeOnce" name="changeOnce" id="changeOnce" placeholder="changes when x remaining"> 
+                                </div>  
+                        </div>
+                        <div class="modalItems"> 
+                            <label class="ml" for="recipient"> Recipient </label>
+                            <select class="create" name="recipient" id="recipient" required>
+                                <option value="" disabled selected> Select Recipient </option>
+                                {% for usr in users %}
+                                    <option value="{{usr.username}}"> {{usr.username}} </option>
+                                {% endfor %}
+                            </select> 
+                        </div>
+                        <div class="modalItems"> 
+                            <label class="ml" for="delivery_method">Delivery Method:</label>
+                            <select class="create" name="delivery_method" id="delivery_method" required>
+                                <option value="" disabled selected>Method Names</option>
+                                <option value="Email"> Email </option>
+                                <option value="Text Message">Text Message</option>
+                                <option value="Jira">Jira</option>
+                            </select>  
+                        </div>
+
+                        <div class="modalItems"> 
+                            <label class="ml" for="status">Status:</label>
+                            <select class="create" name="status" id="status" required>
+                                <option value="" disabled selected> Set Status</option>
+                                <option value="active">Active</option>
+                                <option value="pending">Pending</option>
+                                <option value="inactive">Inactive</option>
+                            </select>  
+                        </div>
+
+                        <button type="submit" class="modalButton">Create Issue</button> 
+                        {% csrf_token %}
+                    </form>
+                </div>        
+            </div>
+        </div>
+        <script type="text/javascript" src="{% static 'form/main.js' %}"></script>
+        <noscript> You need to activate your JavaScript! </noscript>
+    </body>

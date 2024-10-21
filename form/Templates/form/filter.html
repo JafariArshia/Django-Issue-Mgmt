@@ -1,0 +1,86 @@
+{% extends "form/base.html" %}
+{% block content %}
+{% load static %}
+
+<nav class="headerHome"></nav>
+    <div class>
+        <ul class="headerul">
+            <li>        
+                <button class = "otherButton"><a class= "othera headera" href="{% url 'task_list' %}">  Home </a> </button>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% if filtResults %}
+<div class="gridScroll2">  
+    <div class="grid-cont"> 
+        <div class ="grid-header"> Task ID </div>
+        <div class ="grid-header"> Subject </div>
+        <div class ="grid-header"> Content </div>
+        <div class ="grid-header"> Issue Type</div>
+        <div class ="grid-header"> Add Date Time </div>
+        <div class ="grid-header"> Start Date </div>
+        <div class ="grid-header"> End Date </div>
+        <div class ="grid-header"> Due Date </div>
+        <div class ="grid-header"> Frequency </div>
+        <div class ="grid-header"> Delivery Method </div>
+        <div class ="grid-header"> Recipient </div>
+        <div class ="grid-header"> Status </div>
+    {% for page in page_obj %}
+        <div class ="grid-item"><a href="{% url 'task_detail' page.task_id %}"> {{ page.task_id }} </a> </div>
+        <div class ="grid-item"> {{ page.subject }} </div>
+        <div class ="grid-item"> {{ page.content }} </div>
+        <div class ="grid-item"> {{ page.issue_type.issue_type }} </div>
+        <div class ="grid-item"> {{ page.add_date_time|date:"Y-m-d H:i:s" }} </div>
+        <div class ="grid-item"> {{ page.start_date|date:"Y-m-d H:i:s" }} </div>
+        <div class ="grid-item"> {{ page.end_date|date:"Y-m-d H:i:s" }} </div>
+        <div class ="grid-item"> {{ page.due_date|date:"Y-m-d H:i:s" }} </div>
+        <div class ="grid-item"> {{ page.frequency.description }} </div>
+        <div class ="grid-item"> {{ page.delivery_method.method_name }} </div>
+        <div class ="grid-item"> {{ page.recipient.username}} </div>
+        <div class ="grid-item"> <p class="status"> {{ page.status }} </p>  </div>
+    {% endfor %}
+</div>
+
+<div class="pagination">
+    <div> Showing results for: "{{filterSearchValue}}".</div>
+    <div>
+        <form method="get" action="{% url 'filter' %}">
+            <label for="page">Go to page:</label>
+            <select name="page" id="page" onchange="this.form.submit()">
+                {% for i in page_obj.paginator.page_range %}
+                    <option value="{{ i }}" {% if i == page_obj.number %}selected{% endif %}> {{ i }} </option>
+                {% endfor %}
+            </select>
+            <input type="hidden" name="filters" value="{{ filterValue }}">
+            <input type="hidden" name="filterInput" value="{{ filterSearchValue }}">
+            <input type="hidden" name="filterDate" value="{{ filterTime }}">
+            <noscript><button type="submit">Submit</button></noscript> 
+        </form>
+    </div>
+
+    <div class="current">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages  }}.
+    </div>
+    <div>
+        {% if page_obj.has_previous %}
+        <a href="?filterSearchValue={{ filterSearchValue }}&filterValue={{ filterValue }}&filterTime={{ filterTime }}&page=1" class="prev-next"> &laquo; first</a>
+        <span class="word2"> | </span>
+        <a href="?filterSearchValue={{ filterSearchValue }}&filterValue={{ filterValue }}&filterTime={{ filterTime }}&page={{ page_obj.previous_page_number }}" class="prev-next">previous</a>
+        {% endif %}
+    </div>
+    <div>
+        {% if page_obj.has_next %}
+        <a href="?filterSearchValue={{ filterSearchValue }}&filterValue={{ filterValue }}&filterTime={{ filterTime }}&page={{ page_obj.next_page_number }}" class="prev-next">next</a>
+        <span class="word2"> | </span>
+        <a href="?filterSearchValue={{ filterSearchValue }}&filterValue={{ filterValue }}&filterTime={{ filterTime }}&page={{ page_obj.paginator.num_pages }}" class="prev-next"> last &raquo; </a>
+        {% endif %}
+    </div>
+
+</div>
+{% else %}
+    <p class="notAvailable"> {{message}} </p>
+{% endif %}
+
+
+{% endblock content %}

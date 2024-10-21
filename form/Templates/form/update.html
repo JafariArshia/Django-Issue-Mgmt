@@ -1,0 +1,151 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        <link rel="stylesheet" type="text/css" href="{% static 'form/main.css' %}">
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div class ="bar">
+            <div> Update Issue </div> 
+            <div class="barLink">
+                {% if user.is_authenticated %}
+                    <div> <a href="{% url 'profile' %}" class="issuea"> Profile </a> </div>
+                    <div> 
+                        <form method="POST" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="logoutButton">Logout</button>
+                        </form> 
+                    </div>                
+                {% else %}
+                    <div> <a href="{% url 'register' %}" class="issuea"> Register </a> </div>
+                    <div> <a href="{% url 'login' %}" class="issuea"> Login </a> </div>
+                {% endif %}
+            </div>
+        </div>
+        <nav class="headerHome">
+            <div class>
+                <ul class="headerul">
+                    <li>
+                        <button class = "otherButton"><a class = "othera headera" href="{% url 'task_list' %}">  Home </a> </button>
+                    </li>
+                    <li>
+                        <a href="{% url 'task_detail' task.task_id %}"> <img class="rollIcon" src="{% static 'form/images/rollback.png' %}" /> </a>
+                    </li>
+                </ul>   
+            </div> 
+        </nav>
+        <div class="mflexComment"> 
+            <div id="modal"> 
+                <div id = "modalTop" class = "modalTop"> 
+                    <div class="modalHeader"> Please Fill In The Form With Required Information </div>   
+                </div>
+                <div id="modalContent">    
+
+                    <form method="POST" action="{% url 'update_issue' task.task_id %}">
+                        
+                        
+                        <div class="modalItems">
+                            <label class="ml" for="subject">Subject:</label>
+                            <input type="text" id="subject" class="subj" name="subject" value="{{task.subject}}" required>
+                        </div>
+
+                        <div class="modalItems">
+                            <label class="ml" for="content">Content:</label>
+                            <textarea id="content" name="content" rows="3" required>{{task.content}}</textarea>  
+                        </div>
+
+                        <div class="modalItems">
+                            <label class="ml" for="issue_type">Issue Type:</label>
+                            <select class="create" name="issue_type" id="issue_type" required>
+                                <option value="" disabled selected>Issue Types</option>
+                                <option value="Top Urgent" {% if task.issue_type.issue_type == 'Top Urgent' %}selected{% endif %}> Top Urgent </option>
+                                <option value="Urgent" {% if task.issue_type.issue_type == 'Urgent' %}selected{% endif %}>Urgent</option>
+                                <option value="High" {% if task.issue_type.issue_type == 'High' %}selected{% endif %}>High</option>
+                                <option value="Moderate" {% if task.issue_type.issue_type == 'Moderate' %}selected{% endif %}>Moderate</option>
+                                <option value="Low" {% if task.issue_type.issue_type == 'Low' %}selected{% endif %}>Low</option>
+                            </select>  
+                        </div>
+
+                        <!-- Date Entries -->
+
+                        <div class="modalItems">
+                            <label class="ml" for="start_date">Start Date:</label>
+                            <input type="datetime-local" id="start_date" name="start_date" value="{{task.start_date|date:'Y-m-d\TH:i'}}" required>
+                        </div>
+
+                        <div class="modalItems">
+                            <label class="ml" for="end_date">End Date:</label>
+                            <input type="datetime-local" id="end_date" name="end_date" value="{{task.end_date|date:'Y-m-d\TH:i'}}">
+                        </div>
+
+                        <div class="modalItems">
+                            <label class="ml" for="due_date">Due Date:</label>
+                            <input type="datetime-local" id="due_date" name="due_date" value="{{task.due_date|date:'Y-m-d\TH:i'}}">
+                        </div>
+
+                        <div class="modalItems">
+                            <label class="ml" for="interval_type"> Frequency </label>
+                            <select class="create" name="interval_type" id="interval_type" required>
+                                <option value="" disabled selected>Frequency Type</option>
+                                <option value="Hourly" {% if task.frequency.interval_type == 'Hourly' %}selected{% endif %} >Hourly</option>
+                                <option value="Daily" {% if task.frequenecy.interval_type == 'Daily' %}selected{% endif %} >Daily</option>
+                                <option value="Weekly" {% if task.frequency.interval_type == 'Weekly' %}selected{% endif %}>Weekly</option>
+                                <option value="Monthly" {% if task.frequency.interval_type == 'Monthly' %}selected{% endif %}>Monthly</option>
+                                <option value="Yearly" {% if task.frequency.interval_type == 'Yearly' %}selected{% endif %}>Yearly</option>
+                            </select> 
+                            <input type="text" id="interval_value" name="interval_value" value="{{task.frequency.interval_value}}" required>
+                        </div>
+                        <div class="modalItems">            
+                            <label class="ml" for="addFreq" id="addFreqLabel"> Extended-Frequency </label>
+                            <input type="checkbox" id="addFreq" name="addFreq"
+                            {% if task.frequency.extended_frequency_boolean == 1 %} checked {% endif %}>
+                                <div id="changeContainer"> 
+                                    <label class="ml" for="changeOnce" id="changeAfter" class="changeAfter"> Change Frequency:  </label>
+                                    <input type="text" class="changeOnce" name="changeOnce" id="changeOnce" value="{{task.frequency.extended_frequency_value}}"> 
+                                </div>  
+                        </div>
+                        <div class="modalItems"> 
+                            <label class="ml" for="delivery_method">Delivery Method:</label>
+                            <select class="create" name="delivery_method" id="delivery_method" required>
+                                <option value="" disabled selected>Method Names</option>
+                                <option value="Email" {% if task.delivery_method.method_name == 'Email' %}selected{% endif %} > Email </option>
+                                <option value="Text Message" {% if task.delivery_method.method_name == 'Text Message' %}selected{% endif %} >Text Message</option>
+                                <option value="Jira" {% if task.delivery_method.method_name == 'Jira' %}selected{% endif %} >Jira</option>
+                            </select>  
+                        </div>
+                        <div class="modalItems"> 
+                            <label class="ml" for="recipient"> Recipient </label>
+                            <select class="create" name="recipient" id="recipient" required>
+                                <option value="" disabled selected> Select Recipient </option>
+                                {% for usr in users %}
+                                    <option value="{{usr.username}}" {% if usr.username == task.recipient.username %}selected{% endif %}> {{usr.username}} </option>
+                                {% endfor %}
+                            </select> 
+                        </div>
+                        <div class="modalItems"> 
+                            <label class="ml" for="status">Status:</label>
+                            <select class="create" name="status" id="status" required>
+                                <option value="" disabled selected> Set Status</option>
+                                <option value="active" {% if task.status == 'active' %}selected{% endif %}>Active</option>
+                                <option value="active" {% if task.status == 'pending' %}selected{% endif %}>Pending</option>
+                                <option value="inactive" {% if task.status == 'inactive' %}selected{% endif %}>Inactive</option>
+                            </select>  
+                        </div>
+
+                        <button type="submit" class="modalButton">Update Issue</button> 
+                        {% csrf_token %}
+                    </form>
+                </div>        
+            </div>
+        </div>
+        <script type="text/javascript" src="{% static 'form/main.js' %}"></script>
+        <noscript> You need to activate your JavaScript! </noscript>
+    </body>

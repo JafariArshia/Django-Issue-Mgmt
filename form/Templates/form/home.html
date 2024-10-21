@@ -1,0 +1,111 @@
+{% extends "form/base.html" %}
+{% block content %}
+{% load static %}
+
+<nav class="header">
+    <div class>
+        <ul class="headerul">
+            <li> 
+                <form method="GET" action="{% url 'filter' %}" class="ff">
+                    <select name="filters" id="filters">
+                        <option value="" disabled selected>Filters</option>
+                        <option value="issue_type">Issue Types</option>
+                        <option value="frequency">Frequencies</option>
+                        <option value="delivery_method">Delivery Methods</option>
+                        <option value="recipient">Recipients</option>
+                        <option value="status">Status</option>
+                        <option value="add_date_time">Date</option>
+                    </select>
+                    <input type="text" name = "filterInput" id="filterInput" placeholder="Select a Filter">
+                    <input type="text" name = "filterDate" id="filterDate" placeholder="Select The Second Date/Time">
+                    <button type = "submit" class = "searchButton" id = "searchButton"> Submit </button>
+                </form>
+            </li>
+        </ul>
+    </div>
+        <ul class = "headerul">
+            <li>      
+                <form method="GET" action="{% url 'search' %}" class="ff">
+                    <input type="text" name="query" id="searchInput" placeholder="Search For Content"> 
+                    <button class = "searchButton" id = "searchButton"> Search <img class="icon" src="{% static 'form/images/search.png' %}"/> </button>      
+                </form>
+            </li> 
+            <li>
+                 <span class="word"> | </span>
+            </li>
+            <li>
+                <button id = "createb" class = "createb"><a class="issuea headera" href="{% url 'create_issue' %}"> Create Issue </a></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="gridScroll">   
+    <div class="grid-cont"> 
+        <div class ="grid-header"> Task ID </div>
+        <div class ="grid-header"> Subject </div>
+        <div class ="grid-header"> Content </div>
+        <div class ="grid-header"> Issue Type</div>
+        <div class ="grid-header"> Add Date Time </div>
+        <div class ="grid-header"> Start Date </div>
+        <div class ="grid-header"> End Date </div>
+        <div class ="grid-header"> Due Date </div>
+        <div class ="grid-header"> Frequency </div>
+        <div class ="grid-header"> Delivery Method </div>
+        <div class ="grid-header"> Recipient </div>
+        <div class ="grid-header"> Status </div>
+
+        {% for page in page_obj %}
+            <div class ="grid-item"><a href="{% url 'task_detail' page.task_id %}"> {{ page.task_id }} </a> </div>
+            <div class ="grid-item"> {{ page.subject }} </div>
+            <div class ="grid-item"> {{ page.content }} </div>
+            <div class ="grid-item"> {{ page.issue_type.issue_type }} </div>
+            <div class ="grid-item"> {{ page.add_date_time|date:"Y-m-d H:i:s" }} </div>
+            <div class ="grid-item"> {{ page.start_date|date:"Y-m-d H:i:s" }} </div>
+            <div class ="grid-item"> {{ page.end_date|date:"Y-m-d H:i:s" }} </div>
+            <div class ="grid-item"> {{ page.due_date|date:"Y-m-d H:i:s" }} </div>
+            <div class ="grid-item"> {{ page.frequency.description }} </div>
+            <div class ="grid-item"> {{ page.delivery_method.method_name }} </div>
+            <div class ="grid-item"> {{ page.recipient.username}} </div>
+            <div class ="grid-item"><p class="status"> {{ page.status }} </p>  </div>
+        {% endfor %}
+    </div>
+</div> 
+<div class="pagination">
+        <div>
+            <form method="get" action="{% url 'task_list' %}">
+                <label for="page">Go to page:</label>
+                <select name="page" id="page" onchange="this.form.submit()">
+                    {% for i in page_obj.paginator.page_range %}
+                        <option value="{{ i }}" {% if i == page_obj.number %}selected{% endif %}> {{ i }} </option>
+                    {% endfor %}
+                </select>
+                <noscript><button type="submit">Submit</button></noscript>  <!-- For users with JavaScript disabled -->
+            </form>
+        </div>
+
+        <div class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages  }}.
+        </div>
+        <div> 
+            {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <span class="word2"> | </span>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+        </div>
+        <div>
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <span class="word2"> | </span>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </div>
+
+</div>
+
+
+
+
+{% endblock content %}

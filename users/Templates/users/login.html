@@ -1,0 +1,30 @@
+{% extends "form/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="mflexLogin"> 
+        <div id="modal"> 
+            <div id = "modalTop" class = "modalTop"> 
+                <div class="modalHeader"> Please Enter Your Login Information. </div>   
+            </div>
+            <div id="modalContent">
+                <form method="POST">
+                    {% csrf_token %}
+                    <fieldset>
+                        {{ form|crispy }}
+                    </fieldset>
+                    <div class="loginFlex"> 
+                        <div> 
+                            <small class="dnt"> Don't Have An Account? <a href="{% url 'register' %}"> Sign Up Now! </a> </small>
+                        </div>
+                        <div> <button type="submit"> Login </button> </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+{% endblock content %}

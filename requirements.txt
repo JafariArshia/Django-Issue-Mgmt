@@ -1,0 +1,35 @@
+asgiref==3.8.1
+async-timeout==4.0.3
+billiard==4.2.1
+cffi==1.17.0
+click==8.1.7
+click-didyoumean==0.3.1
+click-plugins==1.1.1
+click-repl==0.3.0
+crispy-bootstrap4==2024.1
+cryptography==43.0.0
+Django==4.2.15
+django-crispy-forms==2.3
+django-phonenumber-field==8.0.0
+django-timezone-field==7.0
+greenlet @ file:///C:/b/abs_a6c75ie0bc/croot/greenlet_1702060012174/work
+mkl-fft @ file:///C:/b/abs_19i1y8ykas/croot/mkl_fft_1695058226480/work
+mkl-random @ file:///C:/b/abs_edwkj1_o69/croot/mkl_random_1695059866750/work
+mkl-service==2.4.0
+mysql-connector-python @ file:///D:/bld/mysql-connector-python_1723222873514/work/mysql-connector-python
+mysqlclient==2.2.4
+numexpr @ file:///C:/b/abs_5fucrty5dc/croot/numexpr_1696515448831/work
+numpy==2.0.2
+pillow==10.4.0
+prompt_toolkit==3.0.48
+PyMySQL==1.1.1
+pyodbc==5.1.0
+python-dateutil @ file:///C:/b/abs_3au_koqnbs/croot/python-dateutil_1716495777160/work
+python-dotenv==1.0.1
+SQLAlchemy @ file:///C:/b/abs_aa2izo0xio/croot/sqlalchemy_1718378184063/work
+sqlparse==0.5.1
+threadpoolctl==3.5.0
+tk==0.1.0
+typing_extensions==4.12.2
+tzdata==2024.2
+wcwidth==0.2.13
