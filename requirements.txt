@@ -25,6 +25,7 @@ prompt_toolkit==3.0.48
 PyMySQL==1.1.1
 pyodbc==5.1.0
 python-dateutil @ file:///C:/b/abs_3au_koqnbs/croot/python-dateutil_1716495777160/work
+python-decouple==3.8
 python-dotenv==1.0.1
 SQLAlchemy @ file:///C:/b/abs_aa2izo0xio/croot/sqlalchemy_1718378184063/work
 sqlparse==0.5.1
