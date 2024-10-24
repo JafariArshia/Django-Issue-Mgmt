@@ -68,27 +68,6 @@ class IssueTypes(models.Model):
         db_table = 'issue_types'
     def __str__ (self):
         return self.issue_type
-    
-
-class Users(models.Model):
-    user_no = models.AutoField(db_column='User_no', primary_key=True)  # Field name made lowercase.
-    recipient = models.CharField(db_column='Full_Name', max_length=50 , default='default')  # Field name made lowercase.
-    email = models.CharField(db_column='Email', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    country_code = models.CharField(db_column='Country_Code', max_length=10, blank=True, null=True)  # Field name made lowercase.
-    phone_no = models.CharField(db_column='Phone_no', max_length=15, blank=True, null=True)  # Field name made lowercase.
-    add_date_time = models.DateTimeField(db_column='Add_Date_Time', blank=True, default=timezone.now)  # Field name made lowercase.
-    status = models.CharField(db_column='Status', max_length=8, choices = [        
-        ('active', 'Active'),
-        ('inactive', 'Inactive'),
-        ('pending', 'Pending'),
-    ], default='active')  # Field name made lowercase.
-
-    class Meta:
-        managed = True
-        db_table = 'users'
-
-
-
 
 class Task(models.Model):
     task_id = models.AutoField(db_column='Task_id', primary_key=True)  # Field name made lowercase.

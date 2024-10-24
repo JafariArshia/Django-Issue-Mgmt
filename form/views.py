@@ -47,9 +47,6 @@ def searchContent(request):
     results = []
     if query:
         results = Task.objects.filter(content__icontains = query)
-  #  paginator = Paginator(results, 10)  # Show 10 results per page
-    # page_number = request.GET.get('page')
-    # page_obj = paginator.get_page(page_number)
     if len(results) == 0:
         message = 'Error: Data Requested Is Not Found!'
     paginator = Paginator(results, 15)
@@ -144,7 +141,6 @@ def home(request):
 
 
 #To Crate an Issue ---------------------------
-
 @login_required
 def create_issue(request):
     users = User.objects.all()
