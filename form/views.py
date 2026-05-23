@@ -46,7 +46,7 @@ def searchContent(request):
     query = request.GET.get('query')
     results = []
     if query:
-        results = Task.objects.filter(content__icontains = query)
+        results = Task.objects.filter(content__icontains = query).order_by('-add_date_time')
     if len(results) == 0:
         message = 'Error: Data Requested Is Not Found!'
     paginator = Paginator(results, 15)
@@ -87,16 +87,16 @@ def filterContent(request):
                 try:
                     range1 = datetime.strptime(filterSearchValue, "%Y-%m-%d %H:%M:%S")
                     range2 = datetime.strptime(filterTime, "%Y-%m-%d %H:%M:%S")
-                    filtResults = Task.objects.filter(add_date_time__range= (range1, range2 ))
+                    filtResults = Task.objects.filter(add_date_time__range= (range1, range2 )).order_by('-add_date_time')
                 except ValueError:
                     message = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS ."
             else:
                 if filterValue in foreign_key_fields:
                     filter_kwargs = {f"{foreign_key_fields[filterValue]}__icontains": filterSearchValue}
-                    filtResults = Task.objects.filter(**filter_kwargs)
+                    filtResults = Task.objects.filter(**filter_kwargs).order_by('-add_date_time')
                 else:
                     filter_kwargs={f"{filterValue}__icontains":filterSearchValue}
-                    filtResults = Task.objects.filter(**filter_kwargs)  
+                    filtResults = Task.objects.filter(**filter_kwargs).order_by('-add_date_time')
 
             if not filtResults.exists():
                 message = "Error: No tasks found matching the criteria!"
@@ -128,7 +128,7 @@ def filterContent(request):
 #Reports on the first page --------------------
 @login_required
 def home(request):
-    tasks = Task.objects.all()  
+    tasks = Task.objects.all().order_by('-add_date_time')
     paginator = Paginator(tasks, 15)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)

@@ -17,6 +17,7 @@ __pycache__/
 # Ignore virtual environment
 venv/
 env/
+djangoEnv/
 myenv/
 
 # Ignore IDE-specific files
